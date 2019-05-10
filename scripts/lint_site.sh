@@ -21,8 +21,12 @@ check_content() {
     target_branch=$(curl -s -X GET -G $url | jq '.base.ref' | tr -d '"')
     circle_branch=$(curl -s -X GET -G $url | jq '.head.ref' | tr -d '"')
 
+    git branch
+
     git checkout -q $target_branch
     git reset --hard -q origin/$target_branch
+
+    git branch
     git checkout -q $circle_branch
 
     echo "Getting list of changed files..."

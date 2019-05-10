@@ -10,8 +10,8 @@ mdl --version
 # This performs spell checking and style checking over markdown files in a content
 # directory. 
 check_content() {
-    DIR=$1
-    LANG=$2
+    
+    CHANGED_FILES=$(git diff-tree -r --no-commit-id --name-only master@\{u\} HEAD | grep *.md)
 
     for month in $(ls 2019)
     do  

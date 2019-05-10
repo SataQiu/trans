@@ -8,7 +8,7 @@ echo -ne "mdl "
 mdl --version
 
 # This performs spell checking and style checking over markdown files in a content directory. 
-check_content() {
+check_pull_request_content() {
 
     # only check pull request, skip others
     if [[ -z $CIRCLE_PULL_REQUEST ]]; then
@@ -31,25 +31,22 @@ check_content() {
     changed_files=$(git diff --name-only $target_branch..$local_branch -- '*.md')
     echo ${changed_files[@]}
 
-    for file in ${changed_files}
-    do  
-        # spell check
-        mdspell --en-us --ignore-acronyms --ignore-numbers --no-suggestions --report ${file}
-        if [[ "$?" != "0" ]]
-        then
-            FAILED=1
-        fi
+    # spell check
+    mdspell --en-us --ignore-acronyms --ignore-numbers --no-suggestions --report ${changed_files[@]}
+    if [[ "$?" != "0" ]]
+    then
+        FAILED=1
+    fi
 
-        # markdown format check
-        mdl --ignore-front-matter --style mdl_style.rb ${file}
-        if [[ "$?" != "0" ]]
-        then
-            FAILED=1
-        fi
-    done
+    # markdown format check
+    mdl --ignore-front-matter --style mdl_style.rb ${changed_files[@]}
+    if [[ "$?" != "0" ]]
+    then
+        FAILED=1
+    fi
 }
 
-check_content
+check_pull_request_content
 
 if [[ ${FAILED} -eq 1 ]]; then
     echo "LINTING FAILED"

@@ -21,7 +21,7 @@ check_content() {
     target_branch=$(curl -s -X GET -G $url | jq '.base.ref' | tr -d '"')
     circle_branch=$(curl -s -X GET -G $url | jq '.head.ref' | tr -d '"')
 
-    git branch
+    git branch -b $circle_branch
 
     git checkout -q $target_branch
     git reset --hard -q origin/$target_branch

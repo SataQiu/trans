@@ -17,16 +17,20 @@ check_content() {
     fi
 
     # parse target branch
-    PR_NUMBER=`echo $CIRCLE_PULL_REQUEST | grep -o "[[:digit:]]\+$"`
-    url="https://api.github.com/repos/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/pulls/$PR_NUMBER"
+    url="https://api.github.com/repos/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/pulls/$CIRCLE_PR_NUMBER"
     target_branch=$(curl -s -X GET -G $url | jq '.base.ref' | tr -d '"')
+    circle_branch=$(curl -s -X GET -G $url | jq '.head.ref' | tr -d '"')
+
+    git branch
 
     git checkout -q $target_branch
     git reset --hard -q origin/$target_branch
-    git checkout -q $CIRCLE_BRANCH
+
+    git branch
+    git checkout -q $circle_branch
 
     echo "Getting list of changed files..."
-    changed_files=$(git diff --name-only $target_branch..$CIRCLE_BRANCH -- '*.md')
+    changed_files=$(git diff --name-only $target_branch..$circle_branch -- '*.md')
 
     echo ${changed_files[@]}
 

@@ -13,6 +13,8 @@ check_content() {
 
     CHANGED_FILES=$(git diff -r --no-commit-id --name-only HEAD..master)
 
+    git log -3
+
     echo ${CHANGED_FILES[@]}
 
     exit 0

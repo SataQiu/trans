@@ -22,7 +22,7 @@ check_pull_request_content() {
     LOCAL_BRANCH=$(curl -s -X GET -G ${URL} | jq '.head.ref' | tr -d '"')
 
     # get changed files of this PR
-    git checkout -b ${LOCAL_BRANCH}
+    git checkout -q -b ${LOCAL_BRANCH}
     git checkout -q ${TARGET_BRANCH}
     git reset --hard -q origin/${TARGET_BRANCH}
     git checkout -q ${LOCAL_BRANCH}

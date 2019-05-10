@@ -12,6 +12,7 @@ check_content() {
 
     # only check pull request, skip others
     if [[ -z $CIRCLE_PULL_REQUEST ]]; then
+        echo "skip, only check pull request "
         exit 0
     fi
 
